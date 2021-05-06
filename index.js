@@ -20,7 +20,7 @@ mongoose
     return Recipe.deleteMany();
   })
   .then(() => {
-    const result = Recipe.create({
+    Recipe.create({
       title: "Pamonha",
       level: "Amateur Chef",
       ingredients: ["Fresh Corn", "Milk", "Sugar", "Salt"],
@@ -31,23 +31,24 @@ mongoose
       duration: 40,
       creator: "Tia Anastacia",
       created: "01/01/1990",
+    })
+    .then((result) => {
+      console.log("CREATED RECIPE =>", result);
+
+      Recipe.insertMany(data).then((allRecipes) => {
+        console.log("ALL RECIPES =>", allRecipes);
+
+        Recipe.findOneAndUpdate(
+          { title: "Rigatoni alla Genovese" },
+          { $set: { duration: 100 } },
+          { new: true }
+        ).then((updatedRecipe) => {
+          console.log("UPDATED RECIPE =>", updatedRecipe);
+        });
+      });
     });
-    console.log("CREATED RECIPE =>", result);
 
-    const allRecipes = Recipe.insertMany(data);
-    console.log("ALL RECIPES =>", allRecipes);
-
-    const updatedRecipe = Recipe.findOneAndUpdate(
-      { title: "Rigatoni alla Genovese" },
-      { $set: { duration: 100 } },
-      { new: true }
-    );
-
-    console.log("UPDATED RECIPE =>", updatedRecipe)
-
-    const deletedRecipe = Recipe.deleteOne(
-      {title: "Carrot Cake"}
-    );
+    const deletedRecipe = Recipe.deleteOne({ title: "Carrot Cake" });
   })
   .catch((error) => {
     console.error("Error connecting to the database", error);
