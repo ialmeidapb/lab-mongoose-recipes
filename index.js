@@ -44,12 +44,18 @@ mongoose
           { new: true }
         ).then((updatedRecipe) => {
           console.log("UPDATED RECIPE =>", updatedRecipe);
+        //Iteration V
+        Recipe.deleteOne({
+          title: "Carrot Cake",
+        }).then((deletedRecipe) => {
+          console.log("Recipe Deletada - ", deletedRecipe);
+          //Iteration VI
+          mongoose.connection.close();
         });
       });
     });
-
-    const deletedRecipe = Recipe.deleteOne({ title: "Carrot Cake" });
-  })
-  .catch((error) => {
-    console.error("Error connecting to the database", error);
   });
+})
+.catch((error) => {
+  console.error("Error connecting to the database", error);
+});
